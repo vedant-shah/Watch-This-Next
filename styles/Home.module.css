@@ -1,14 +1,119 @@
 .container {
-  /* padding: 0 2rem; */
-  background-color: #3B3B98;
-}
-
-.main {
+  padding: 0 2rem;
   min-height: 100vh;
-  padding: 4rem 0;
+  padding: 1rem;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.main {
+  text-align: center;
+}
+
+/* From uiverse.io by @alexmaracinaru */
+.cta {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.cta span {
+  padding-bottom: 7px;
+  /* letter-spacing: 4px; */
+  font-size: 1.25rem;
+  padding-right: 15px;
+  font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  /* text-transform: uppercase; */
+}
+
+.cta svg {
+  transform: translateX(-8px);
+  transition: all 0.3s ease;
+}
+
+.cta:hover svg {
+  transform: translateX(0);
+}
+
+.cta:active svg {
+  transform: scale(0.9);
+}
+
+.hover_underline_animation {
+  position: relative;
+  color: black;
+  padding-bottom: 20px;
+}
+
+/* .hover_underline_animation:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1.5px;
+  bottom: 0;
+  left: 0;
+  background-color: #000000;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+} */
+
+.cta:hover .hover_underline_animation:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.top-icon .fa {
+  right: 20px;
+  top: 10px;
+  position: fixed;
+  font-size: 30px;
+  cursor: pointer;
+}
+.top-icon {
+  background-color: #487eb0;
+  padding: 25px;
+  display: block;
+}
+.navbar {
+  text-align: center;
+  display: block;
+  padding: 0px;
+  position: fixed;
+}
+.navbar-nav {
+  display: block;
+}
+.navbar-nav li a:hover {
+  color: #dfe6e9;
+}
+.navbar-nav .fa {
+  padding-right: 20px;
+  padding-bottom: 50px;
+}
+/* a {
+  font-size: 40px;
+  color: #fff;
+  text-align: center;
+} */
+.opnesidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  overflow-x: hidden;
+  transition: 0.5s;
+  top: 0px;
+  background-color: #353b48;
+}
+
+@media (min-width: 550px) {
+  #checklist {
+    max-height: 60vh;
+    flex-flow: wrap;
+  }
 }
