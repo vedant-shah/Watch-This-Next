@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 function MovieCard(props) {
   const {
@@ -9,6 +9,8 @@ function MovieCard(props) {
     release_date,
     title,
     vote_average,
+    name,
+    first_air_date,
   } = props;
   return (
     <>
@@ -146,8 +148,8 @@ function MovieCard(props) {
               className="locandina"
               src={`https://image.tmdb.org/t/p/w500/${poster_path}`}
             />
-            <h2>{title}</h2>
-            <h4>{release_date.substring(0, 4)}</h4>
+            <h2>{title || name}</h2>
+            <h4>{(release_date || first_air_date).substring(0, 4)}</h4>
             <span className="minutes">117 min</span>
             <p className="type">{genre_ids}</p>
           </div>

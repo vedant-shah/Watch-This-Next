@@ -83,6 +83,8 @@ function Top() {
               release_date,
               title,
               vote_average,
+              first_air_date,
+              name,
             } = element;
             return (
               <MovieCard
@@ -93,6 +95,8 @@ function Top() {
                 release_date={release_date}
                 title={title}
                 vote_average={vote_average}
+                first_air_date={first_air_date}
+                name={name}
               />
             );
           })}
