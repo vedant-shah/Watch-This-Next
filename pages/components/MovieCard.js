@@ -44,6 +44,7 @@ function MovieCard(props) {
           }
           .rating-wrapper {
             flex-direction: column;
+            align-items: flex-start !important;
             width: fit-content;
           }
           .rating-wrapper p {
