@@ -2,18 +2,60 @@ import React, { useEffect, useState } from "react";
 import MovieCard from "./components/MovieCard";
 import Navbar from "./components/Navbar";
 import Link from "next/link";
+import Spinner from "./components/Spinner";
 function Top() {
+  const movieGenreId = {
+    12: "adventure",
+    14: "fantasy",
+    16: "animation",
+    18: "drama",
+    27: "horror",
+    28: "action",
+    35: "comedy",
+    36: "history",
+    37: "western",
+    53: "thriller",
+    80: "crime",
+    99: "documentary",
+    878: "science fiction",
+    9648: "mystery",
+    10402: "music",
+    10749: "romance",
+    10751: "family",
+    10752: "war",
+    10770: "tv movie",
+  };
+  const tvGenreId = {
+    16: "animation",
+    18: "drama",
+    35: "comedy",
+    37: "western",
+    80: "crime",
+    99: "documentary",
+    9648: "mystery",
+    10751: "family",
+    10759: "action & adventure",
+    10762: "kids",
+    10763: "news",
+    10764: "reality",
+    10765: "sci-fi & fantasy",
+    10766: "soap",
+    10767: "talk",
+    10768: "war & politics",
+  };
   const [topType, setTopType] = useState("movie");
   const api_key = "c39a2b5826581941f311b517b8670cc3";
   const baseUrl = `https://api.themoviedb.org/3/${topType}/top_rated?api_key=${api_key}&language=en-US&page=1`;
-  // https://api.themoviedb.org/3/tv/top_rated?api_key=c39a2b5826581941f311b517b8670cc3&language=en-US&page=1
+  const [isLoading, setIsLoading] = useState(true);
   const [topData, setTopData] = useState([]);
+  let time = undefined;
   useEffect(() => {
     const getTopData = () => {
       fetch(baseUrl)
         .then((response) => response.json())
         .then((data) => {
           const { results } = data;
+          setIsLoading(false);
           setTopData(results);
         });
     };
@@ -74,11 +116,14 @@ function Top() {
               tv
             </button>
           </div>
-          {topData.map((element) => {
+
+          {isLoading && <Spinner />}
+          {topData.map((element, index) => {
             const {
               backdrop_path,
               genre_ids,
               overview,
+              id,
               poster_path,
               release_date,
               title,
@@ -86,10 +131,18 @@ function Top() {
               first_air_date,
               name,
             } = element;
+            let genres = "";
+            if (topType === "movie")
+              genres =
+                movieGenreId[genre_ids[0]] + ", " + movieGenreId[genre_ids[1]];
+            else
+              genres = tvGenreId[genre_ids[1]]
+                ? tvGenreId[genre_ids[0]] + ", " + tvGenreId[genre_ids[1]]
+                : tvGenreId[genre_ids[0]];
             return (
               <MovieCard
                 backdrop_path={backdrop_path}
-                genre_ids={genre_ids}
+                genre_ids={genres}
                 overview={overview}
                 poster_path={poster_path}
                 release_date={release_date}

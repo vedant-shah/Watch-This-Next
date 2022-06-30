@@ -137,9 +137,6 @@ export default function Home() {
               cursor: "pointer",
               textDecoration: "underline",
               fontWeight: "bold",
-              // position: "absolute",
-              // top: "12%",
-              // left: "5%",
             }}
             onClick={() => {
               setTabIndex(tabIndex - 1);
@@ -178,9 +175,6 @@ export default function Home() {
               cursor: "pointer",
               textDecoration: "underline",
               fontWeight: "bold",
-              // position: "absolute",
-              // top: "12%",
-              // left: "5%",
             }}
             onClick={() => {
               setTabIndex(tabIndex - 1);

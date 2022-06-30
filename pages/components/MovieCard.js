@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { FaImdb } from "react-icons/fa";
 function MovieCard(props) {
   const {
     backdrop_path,
@@ -9,6 +9,7 @@ function MovieCard(props) {
     release_date,
     title,
     vote_average,
+    runtime,
     name,
     first_air_date,
   } = props;
@@ -36,6 +37,18 @@ function MovieCard(props) {
           }
           ::-webkit-scrollbar {
             display: none;
+          }
+          .minutes {
+            font-size: 0.75rem;
+            width: fit-content;
+          }
+          .rating-wrapper {
+            flex-direction: column;
+            width: fit-content;
+          }
+          .rating-wrapper p {
+            margin: 0;
+            margin-left: 0 !important;
           }
         }
         .info_section {
@@ -150,8 +163,19 @@ function MovieCard(props) {
             />
             <h2>{title || name}</h2>
             <h4>{(release_date || first_air_date).substring(0, 4)}</h4>
-            <span className="minutes">117 min</span>
-            <p className="type">{genre_ids}</p>
+            <div className="d-flex rating-wrapper align-items-center">
+              <span className="minutes">
+                <FaImdb
+                  style={{
+                    color: "#f3ce13",
+                    fontSize: "1.25rem",
+                    marginRight: "5px",
+                  }}
+                />
+                {vote_average}
+              </span>
+              <p className="type mb-0">{genre_ids}</p>
+            </div>
           </div>
           <div className="movie_desc">
             <p className="text">{overview}</p>
