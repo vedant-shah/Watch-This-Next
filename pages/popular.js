@@ -3,7 +3,8 @@ import MovieCard from "../components/MovieCard";
 import Navbar from "../components/Navbar";
 import Link from "next/link";
 import Spinner from "../components/Spinner";
-function Top() {
+
+function Popular() {
   const movieGenreId = {
     12: "adventure",
     14: "fantasy",
@@ -43,11 +44,11 @@ function Top() {
     10767: "talk",
     10768: "war & politics",
   };
-  const [topType, setTopType] = useState("movie");
+  const [popType, setPopType] = useState("movie");
   const api_key = "c39a2b5826581941f311b517b8670cc3";
-  const baseUrl = `https://api.themoviedb.org/3/${topType}/top_rated?api_key=${api_key}&language=en-US&page=1`;
+  const baseUrl = `https://api.themoviedb.org/3/${popType}/popular?api_key=${api_key}&language=en-US&page=1`;
   const [isLoading, setIsLoading] = useState(true);
-  const [topData, setTopData] = useState([]);
+  const [popData, setPopData] = useState([]);
   useEffect(() => {
     const getTopData = () => {
       fetch(baseUrl)
@@ -55,21 +56,21 @@ function Top() {
         .then((data) => {
           const { results } = data;
           setIsLoading(false);
-          setTopData(results);
+          setPopData(results);
         });
     };
     getTopData();
-  }, [topType]);
-  const bg = '#000000';
+  }, [popType]);
+  const bg = '#032137';
   const textc = 'whitesmoke'
   return (
     <>
-      <Navbar bg={bg} textc={textc}/>
+      <Navbar bg={bg} textc={textc} />
       <style jsx>
         {`
           #container {
             min-height: 100vh;
-            background-color: #000000;
+            background-color: #032137;
           }
         `}
       </style>
@@ -96,17 +97,17 @@ function Top() {
               color: "whitesmoke",
               textDecoration: "underline",
             }}>
-            top
+            popular
           </h1>
           <div className="button-wrapper d-flex">
             <button
               className="mx-3"
               onClick={() => {
-                setTopType("movie");
+                setPopType("movie");
               }}
               style={{
                 color: "whitesmoke",
-                textDecoration: topType === "movie" ? "underline" : "none",
+                textDecoration: popType === "movie" ? "underline" : "none",
                 display: "inline",
                 cursor: "pointer",
                 fontSize: "2.25rem",
@@ -115,10 +116,10 @@ function Top() {
             </button>
             <button
               className="mx-3"
-              onClick={() => setTopType("tv")}
+              onClick={() => setPopType("tv")}
               style={{
                 color: "whitesmoke",
-                textDecoration: topType === "tv" ? "underline" : "none",
+                textDecoration: popType === "tv" ? "underline" : "none",
                 display: "inline",
                 cursor: "pointer",
                 fontSize: "2.25rem",
@@ -128,7 +129,7 @@ function Top() {
           </div>
 
           {isLoading && <Spinner />}
-          {topData.map((element, index) => {
+          {popData.map((element, index) => {
             const {
               backdrop_path,
               genre_ids,
@@ -142,7 +143,7 @@ function Top() {
               name,
             } = element;
             let genres = "";
-            if (topType === "movie")
+            if (popType === "movie")
               genres =
                 movieGenreId[genre_ids[0]] + ", " + movieGenreId[genre_ids[1]];
             else
@@ -170,4 +171,4 @@ function Top() {
   );
 }
 
-export default Top;
+export default Popular;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaImdb } from "react-icons/fa";
+import Image from "next/image";
 function MovieCard(props) {
   const {
     backdrop_path,
@@ -66,11 +67,11 @@ function MovieCard(props) {
           padding: 25px;
           height: 40%;
         }
-        .movie_header h2 {
+        .movie_header h5 {
           color: #fff;
           font-weight: 400;
         }
-        .movie_header h4 {
+        .movie_header h6 {
           color: #9ac7fa;
           font-weight: 400;
         }
@@ -162,8 +163,8 @@ function MovieCard(props) {
               className="locandina"
               src={`https://image.tmdb.org/t/p/w500/${poster_path}`}
             />
-            <h2>{title || name}</h2>
-            <h4>{(release_date || first_air_date).substring(0, 4)}</h4>
+            <h5>{title || name}</h5>
+            <h6>{(release_date || first_air_date).substring(0, 4)}</h6>
             <div className="d-flex rating-wrapper align-items-center">
               <span className="minutes">
                 <FaImdb

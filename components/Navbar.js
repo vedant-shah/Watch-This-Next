@@ -10,8 +10,9 @@ const Navbar = (props) => {
             "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen",
           fontWeight: "bolder",
           backgroundColor: props.bg,
+          color: props.textc,
         }}
-        className="navbar  navbar-expand-lg navbar-light ">
+        className="navbar  navbar-expand-lg navbar-dark sticky-top">
         <div className="container-fluid">
           <button
             className="navbar-toggler"
@@ -26,11 +27,24 @@ const Navbar = (props) => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
+                <Link href="/">
+                  <button
+                    className="nav-link"
+                    style={{
+                      color: props.textc,
+                    }}
+                    aria-current="page"
+                    href="/">
+                    home
+                  </button>
+                </Link>
+              </li>
+              <li className="nav-item">
                 <Link href="/top">
                   <button
                     className="nav-link"
                     style={{
-                      color: "black!important",
+                      color: props.textc,
                     }}
                     aria-current="page"
                     href="/top">
@@ -39,14 +53,26 @@ const Navbar = (props) => {
                 </Link>
               </li>
               <li className="nav-item">
-                <button
-                  className="nav-link"
-                  style={{
-                    color: "black!important",
-                  }}
-                  href="#">
-                  popular
-                </button>
+                <Link href="/popular">
+                  <button
+                    className="nav-link"
+                    style={{
+                      color: props.textc,
+                    }}>
+                    popular
+                  </button>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link href="/now-playing">
+                  <button
+                    className="nav-link"
+                    style={{
+                      color: props.textc,
+                    }}>
+                    now playing
+                  </button>
+                </Link>
               </li>
             </ul>
             <form className="">
@@ -69,6 +95,7 @@ const Navbar = (props) => {
                   border: "none",
                   outline: "none",
                   fontWeight: "bolder",
+                  color: props.textc,
                 }}
                 type="button">
                 search

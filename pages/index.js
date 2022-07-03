@@ -2,8 +2,14 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import { useState } from "react";
-import Navbar from "./components/Navbar";
-
+import Navbar from "../components/Navbar";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import FormControl from "@mui/material/FormControl";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import { Typography } from "@mui/material";
 export default function Home() {
   // -----constants---------
   let currentBg = "";
@@ -43,27 +49,9 @@ export default function Home() {
     war: 10752,
     western: 37,
   };
-  let selectedMovieGenre = {
-    action: false,
-    adventure: false,
-    animation: false,
-    comedy: false,
-    crime: false,
-    documentary: false,
-    drama: false,
-    family: false,
-    fantasy: false,
-    history: false,
-    horror: false,
-    music: false,
-    mystery: false,
-    romance: false,
-    "science fiction": false,
-    "tv movie ": false,
-    thriller: false,
-    war: false,
-    western: false,
-  };
+  const [releaseAfter, setReleaseAfter] = useState("");
+  let selectedMovieGenres = [];
+  let selectedTvGenres = [];
   const tvGenreId = {
     "action & adventure": 10759,
     animation: 16,
@@ -82,18 +70,36 @@ export default function Home() {
     "war & politics": 10768,
     western: 37,
   };
+  const [includeAdult, setIncludeAdult] = useState(false);
+
   // --------functions---------
   const getBgColor = () => {
     currentBg = colorPallette[Math.floor(Math.random() * 10)];
     return currentBg;
   };
+  const idToString = () => {
+    if (type === "movie") {
+      const string = "";
+      console.log(selectedMovieGenres);
+      selectedMovieGenres.forEach((element) => {
+        string += element.toString() + ",";
+      });
+      console.log(string);
+    }
+  };
+  const discover = () => {
+    const apiKey = "c39a2b5826581941f311b517b8670cc3";
+    idToString();
+    const baseUrl = `https://api.themoviedb.org/3/discover/${type}?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&include_adult=${includeAdult}&release_date.gte=${releaseAfter}`;
+  };
   const bg = getBgColor();
+  const textc = "black";
 
   if (tabIndex === 0)
     return (
       <>
         {/* ----------NavBar--------------- */}
-        <Navbar bg={bg} />
+        <Navbar bg={bg} textc={textc} />
         {/* ----------------Page------------------ */}
         <div className={styles.container} style={{ backgroundColor: bg }}>
           <main className={styles.main}>
@@ -130,9 +136,9 @@ export default function Home() {
   else if (tabIndex === 1)
     return (
       <>
-        <Navbar bg={bg} />
+        <Navbar bg={bg} textc={textc} />
         <main className={styles.container} style={{ backgroundColor: bg }}>
-          <p
+          <h5
             style={{
               cursor: "pointer",
               textDecoration: "underline",
@@ -142,7 +148,7 @@ export default function Home() {
               setTabIndex(tabIndex - 1);
             }}>
             &#60;back
-          </p>
+          </h5>
           <h1 style={{ fontWeight: "bold" }}>what do you want to watch?</h1>
           <div className="container d-flex justify-content-center">
             <button
@@ -168,9 +174,9 @@ export default function Home() {
   else if (tabIndex === 2)
     return (
       <>
-        <Navbar bg={bg} />
+        <Navbar bg={bg} textc={textc} />
         <main className={styles.container} style={{ backgroundColor: bg }}>
-          <p
+          <h5
             style={{
               cursor: "pointer",
               textDecoration: "underline",
@@ -180,8 +186,8 @@ export default function Home() {
               setTabIndex(tabIndex - 1);
             }}>
             &#60;back
-          </p>
-          {console.log(selectedMovieGenre)}
+          </h5>
+          {/* {console.log(selectedMovieGenre)} */}
           <h1 style={{ fontWeight: "bold" }}>pick preferable genres</h1>
           <div
             className=" my-4 "
@@ -191,38 +197,207 @@ export default function Home() {
               ? Object.keys(movieGenreId).map((element) => {
                   return (
                     <>
-                      <div
-                        className="d-flex flex-row"
-                        key={movieGenreId[element]}>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value={movieGenreId[element]}
-                          checked={selectedMovieGenre[element]}
-                          onChange={() => {
-                            selectedMovieGenre = {
-                              ...selectedMovieGenre,
-                              element: !selectedMovieGenre[element],
-                            };
-                          }}
-                          id="defaultCheck1"
-                          style={{ backgroundColor: "transparent" }}
+                      <div key={Math.random()} className="d-flex flex-row">
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              size="small"
+                              onChange={(e) => {
+                                if (
+                                  selectedMovieGenres.includes(
+                                    movieGenreId[element]
+                                  )
+                                ) {
+                                  const index = selectedMovieGenres.indexOf(
+                                    movieGenreId[element]
+                                  );
+                                  selectedMovieGenres.splice(index, 1);
+                                } else
+                                  selectedMovieGenres.push(
+                                    movieGenreId[element]
+                                  );
+                                  console.log("| selectedMovieGenres", selectedMovieGenres)
+                              }}
+                            />
+                          }
+                          label={
+                            <Typography sx={{ fontWeight: "bold" }}>
+                              {element}
+                            </Typography>
+                          }
                         />
-                        <label
-                          className="form-check-label ms-2"
-                          htmlFor="defaultCheck1"
-                          style={{ fontWeight: "bold" }}>
-                          {element}
-                        </label>
                       </div>
                     </>
                   );
                 })
               : Object.keys(tvGenreId).map((element) => {
-                  return element;
+                  return (
+                    <>
+                      <div key={Math.random()} className="d-flex flex-row">
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              size="small"
+                              onChange={(e) => {
+                                if (
+                                  selectedTvGenres.includes(tvGenreId[element])
+                                ) {
+                                  const index = selectedTvGenres.indexOf(
+                                    tvGenreId[element]
+                                  );
+                                  selectedTvGenres.splice(index, 1);
+                                } else
+                                  selectedTvGenres.push(tvGenreId[element]);
+                              }}
+                            />
+                          }
+                          label={
+                            <Typography sx={{ fontWeight: "bold" }}>
+                              {element}
+                            </Typography>
+                          }
+                        />
+                      </div>
+                    </>
+                  );
                 })}
           </div>
+          <h5
+            style={{
+              cursor: "pointer",
+              textDecoration: "underline",
+              fontWeight: "bold",
+            }}
+            onClick={() => {
+              setTabIndex(tabIndex + 1);
+            }}>
+            next &#62;
+          </h5>
         </main>
       </>
     );
+  else if (tabIndex === 3) {
+    if (type === "movie")
+      return (
+        <>
+          <Navbar bg={bg} textc={textc} />
+          <main className={styles.container} style={{ backgroundColor: bg }}>
+            <h5
+              style={{
+                cursor: "pointer",
+                textDecoration: "underline",
+                fontWeight: "bold",
+              }}
+              onClick={() => {
+                setTabIndex(tabIndex - 1);
+              }}>
+              &#60;back
+            </h5>
+            <h1 style={{ fontWeight: "bold" }}>only family safe movies?</h1>
+            <div className="button-wrapper d-flex ">
+              <h5
+                className="mx-3"
+                onClick={() => {
+                  setIncludeAdult(false);
+                  setTabIndex(tabIndex + 1);
+                }}
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  fontWeight: "bold",
+                  display: "inline",
+                }}>
+                yes
+              </h5>
+              <h5
+                className=""
+                onClick={() => {
+                  setIncludeAdult(true);
+                  setTabIndex(tabIndex + 1);
+                }}
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  fontWeight: "bold",
+                  display: "inline",
+                }}>
+                no, it doesnt matter
+              </h5>
+            </div>
+          </main>
+        </>
+      );
+    else setTabIndex(tabIndex + 1);
+  } else if (tabIndex === 4) {
+    const handleChange = (event) => {
+      setReleaseAfter(event.target.value);
+    };
+    return (
+      <>
+        <Navbar bg={bg} textc={textc} />
+        <main className={styles.container} style={{ backgroundColor: bg }}>
+          <h5
+            style={{
+              cursor: "pointer",
+              textDecoration: "underline",
+              fontWeight: "bold",
+            }}
+            onClick={() => {
+              type === "tv"
+                ? setTabIndex(tabIndex - 2)
+                : setTabIndex(tabIndex - 1);
+            }}>
+            &#60;back
+          </h5>
+          <h1 style={{ fontWeight: "bold" }}>in or after...</h1>
+          <FormControl>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue=""
+              name="radio-buttons-group"
+              value={releaseAfter}
+              onChange={handleChange}>
+              <FormControlLabel
+                value={new Date().getFullYear() - 1}
+                control={<Radio />}
+                label={
+                  <Typography sx={{ fontWeight: "bold" }}>last year</Typography>
+                }
+              />
+              <FormControlLabel
+                value={new Date().getFullYear() - 5}
+                control={<Radio />}
+                label={
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    last 5 years
+                  </Typography>
+                }
+              />
+              <FormControlLabel
+                value=""
+                control={<Radio />}
+                label={
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    doesnt matter
+                  </Typography>
+                }
+              />
+            </RadioGroup>
+          </FormControl>
+          <h5
+            style={{
+              cursor: "pointer",
+              textDecoration: "underline",
+              fontWeight: "bold",
+            }}
+            onClick={() => {
+              // setTabIndex(tabIndex + 1);
+              discover();
+            }}>
+            next &#62;
+          </h5>
+        </main>
+      </>
+    );
+  }
 }
