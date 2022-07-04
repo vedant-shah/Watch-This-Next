@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -10,6 +10,10 @@ import FormControl from "@mui/material/FormControl";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import { Typography } from "@mui/material";
+import MovieCard from "../components/MovieCard";
+import Spinner from "../components/Spinner";
+import { MdSort } from "react-icons/md";
+
 export default function Home() {
   // -----constants---------
   let currentBg = "";
@@ -50,8 +54,10 @@ export default function Home() {
     western: 37,
   };
   const [releaseAfter, setReleaseAfter] = useState("");
-  let selectedMovieGenres = [];
-  let selectedTvGenres = [];
+  const [discoverData, setDiscoverData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedMovieGenres, setSelectedMovieGenres] = useState([]);
+  const [selectedTvGenres, setSelectedTvGenres] = useState([]);
   const tvGenreId = {
     "action & adventure": 10759,
     animation: 16,
@@ -82,19 +88,51 @@ export default function Home() {
       const string = "";
       console.log(selectedMovieGenres);
       selectedMovieGenres.forEach((element) => {
-        string += element.toString() + ",";
+        string += element.toString() + "|";
       });
-      console.log(string);
+      string = string.slice(0, -1);
+      return string;
+    } else {
+      const string = "";
+      console.log(selectedTvGenres);
+      selectedTvGenres.forEach((element) => {
+        string += element.toString() + "|";
+      });
+      string = string.slice(0, -1);
+      return string;
     }
   };
-  const discover = () => {
+  const discover = (sort) => {
+    setIsLoading(true);
+    setDiscoverData([]);
     const apiKey = "c39a2b5826581941f311b517b8670cc3";
-    idToString();
-    const baseUrl = `https://api.themoviedb.org/3/discover/${type}?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&include_adult=${includeAdult}&release_date.gte=${releaseAfter}`;
+    const genres = idToString();
+    if (type === "movie") {
+      const baseUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&sort_by=${sort}&include_adult=${includeAdult}&release_date.gte=${releaseAfter}&with_genres=${genres}`;
+
+      fetch(baseUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          const { results } = data;
+          console.log("| results", results);
+          setIsLoading(false);
+          setDiscoverData(results);
+        });
+    } else {
+      const baseUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&sort_by=${sort}&timezone=America%2FNew_York&first_air_date.gte=${releaseAfter}&with_genres=${genres}`;
+      fetch(baseUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          const { results } = data;
+          console.log("| results", results);
+          setIsLoading(false);
+          setDiscoverData(results);
+        });
+    }
   };
+
   const bg = getBgColor();
   const textc = "black";
-
   if (tabIndex === 0)
     return (
       <>
@@ -171,7 +209,9 @@ export default function Home() {
         </main>
       </>
     );
-  else if (tabIndex === 2)
+  else if (tabIndex === 2) {
+    // setSelectedMovieGenres([]);
+    // setSelectedTvGenres([]);
     return (
       <>
         <Navbar bg={bg} textc={textc} />
@@ -187,7 +227,6 @@ export default function Home() {
             }}>
             &#60;back
           </h5>
-          {/* {console.log(selectedMovieGenre)} */}
           <h1 style={{ fontWeight: "bold" }}>pick preferable genres</h1>
           <div
             className=" my-4 "
@@ -211,12 +250,19 @@ export default function Home() {
                                   const index = selectedMovieGenres.indexOf(
                                     movieGenreId[element]
                                   );
-                                  selectedMovieGenres.splice(index, 1);
-                                } else
-                                  selectedMovieGenres.push(
-                                    movieGenreId[element]
-                                  );
-                                  console.log("| selectedMovieGenres", selectedMovieGenres)
+                                  const tmp = selectedMovieGenres;
+
+                                  tmp.splice(index, 1);
+                                  setSelectedMovieGenres(tmp);
+                                } else {
+                                  const tmp = selectedMovieGenres;
+                                  tmp.push(movieGenreId[element]);
+                                  setSelectedMovieGenres(tmp);
+                                }
+                                console.log(
+                                  "| selectedMovieGenres",
+                                  selectedMovieGenres
+                                );
                               }}
                             />
                           }
@@ -245,9 +291,14 @@ export default function Home() {
                                   const index = selectedTvGenres.indexOf(
                                     tvGenreId[element]
                                   );
-                                  selectedTvGenres.splice(index, 1);
-                                } else
-                                  selectedTvGenres.push(tvGenreId[element]);
+                                  const temp = selectedTvGenres;
+                                  temp.splice(index, 1);
+                                  setSelectedTvGenres(temp);
+                                } else {
+                                  const temp = selectedTvGenres;
+                                  temp.push(tvGenreId[element]);
+                                  setSelectedTvGenres(temp);
+                                }
                               }}
                             />
                           }
@@ -276,7 +327,7 @@ export default function Home() {
         </main>
       </>
     );
-  else if (tabIndex === 3) {
+  } else if (tabIndex === 3) {
     if (type === "movie")
       return (
         <>
@@ -353,7 +404,7 @@ export default function Home() {
           <FormControl>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue=""
+              defaultValue="1965"
               name="radio-buttons-group"
               value={releaseAfter}
               onChange={handleChange}>
@@ -374,7 +425,7 @@ export default function Home() {
                 }
               />
               <FormControlLabel
-                value=""
+                value="1965"
                 control={<Radio />}
                 label={
                   <Typography sx={{ fontWeight: "bold" }}>
@@ -385,17 +436,127 @@ export default function Home() {
             </RadioGroup>
           </FormControl>
           <h5
+            className="my-3"
             style={{
               cursor: "pointer",
               textDecoration: "underline",
               fontWeight: "bold",
             }}
             onClick={() => {
-              // setTabIndex(tabIndex + 1);
-              discover();
+              setTabIndex(tabIndex + 1);
+              const sort = "popularity.desc";
+              discover(sort);
             }}>
-            next &#62;
+            find your {type} &#62;
           </h5>
+        </main>
+      </>
+    );
+  } else if (tabIndex === 5) {
+    return (
+      <>
+        <Navbar bg={bg} textc={textc} />
+        <main className={styles.container} style={{ backgroundColor: bg }}>
+          <h5
+            style={{
+              cursor: "pointer",
+              textDecoration: "underline",
+              fontWeight: "bold",
+            }}
+            onClick={() => {
+              type === "tv"
+                ? setTabIndex(tabIndex - 2)
+                : setTabIndex(tabIndex - 1);
+            }}>
+            &#60;back
+          </h5>
+          <h1 style={{ fontWeight: "bold" }}>we recomend...</h1>
+          <div className="sort-by-wrapper mb-3">
+            <MdSort style={{fontSize: '1.75rem'}} />
+            <span
+              className="mx-2"
+              style={{
+                fontWeight: "bold",
+                textDecoration: "underline",
+                fontSize: "larger",
+              }}>
+              sort by...
+            </span>
+            <span
+            className="mx-3"
+              style={{
+                fontWeight: "bold",
+                textDecoration: "underline",
+                fontSize: "smaller",
+                cursor: "pointer",
+                marginBottom: "0.7rem",
+              }}
+              onClick={() => {
+                const sort = "vote_average.desc";
+                discover(sort);
+              }}>
+              IMDb descending
+            </span>
+            <span
+              style={{
+                fontWeight: "bold",
+                textDecoration: "underline",
+                fontSize: "smaller",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                const sort = "popularity.desc";
+                discover(sort);
+              }}>
+              popularity descending
+            </span>
+          </div>
+          {isLoading && <Spinner />}
+          {!isLoading &&
+            discoverData?.map((element) => {
+              const {
+                backdrop_path,
+                genre_ids,
+                overview,
+                id,
+                poster_path,
+                release_date,
+                title,
+                vote_average,
+                first_air_date,
+                name,
+              } = element;
+              function getKeyByValue(object, value) {
+                return Object.keys(object).find((key) => object[key] === value);
+              }
+              let genres = "";
+              if (type === "movie")
+                genres = genres = getKeyByValue(movieGenreId, genre_ids[1])
+                  ? getKeyByValue(movieGenreId, genre_ids[0]) +
+                    ", " +
+                    getKeyByValue(movieGenreId, genre_ids[1])
+                  : getKeyByValue(movieGenreId, genre_ids[0]);
+              else
+                genres = getKeyByValue(tvGenreId, genre_ids[1])
+                  ? getKeyByValue(tvGenreId, genre_ids[0]) +
+                    ", " +
+                    getKeyByValue(tvGenreId, genre_ids[1])
+                  : getKeyByValue(tvGenreId, genre_ids[0]);
+              return (
+                <MovieCard
+                  key={Math.random()}
+                  backdrop_path={backdrop_path}
+                  genre_ids={genres}
+                  overview={overview}
+                  poster_path={poster_path}
+                  release_date={release_date}
+                  title={title}
+                  vote_average={vote_average}
+                  first_air_date={first_air_date}
+                  name={name}
+                />
+              );
+            })}
         </main>
       </>
     );

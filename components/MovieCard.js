@@ -60,6 +60,8 @@ function MovieCard(props) {
           background-blend-mode: multiply;
           z-index: 2;
           border-radius: 10px;
+          display: flex;
+          flex-direction: column;
         }
 
         .movie_header {
@@ -99,6 +101,10 @@ function MovieCard(props) {
         .movie_desc {
           padding: 25px;
           height: 50%;
+          overflow: scroll;
+        }
+        ::-webkit-scrollbar {
+          display: none;
         }
         .movie_desc .text {
           color: #cfd6e1;
