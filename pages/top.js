@@ -44,7 +44,7 @@ function Top() {
     10768: "war & politics",
   };
   const [topType, setTopType] = useState("movie");
-  const api_key = "c39a2b5826581941f311b517b8670cc3";
+  const api_key = process.env.NEXT_PUBLIC_TMDB_APIKEY;
   const baseUrl = `https://api.themoviedb.org/3/${topType}/top_rated?api_key=${api_key}&language=en-US&page=1`;
   const [isLoading, setIsLoading] = useState(true);
   const [topData, setTopData] = useState([]);

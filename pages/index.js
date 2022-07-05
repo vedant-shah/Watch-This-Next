@@ -105,7 +105,7 @@ export default function Home() {
   const discover = (sort) => {
     setIsLoading(true);
     setDiscoverData([]);
-    const apiKey = "c39a2b5826581941f311b517b8670cc3";
+    const apiKey = process.env.NEXT_PUBLIC_TMDB_APIKEY;
     const genres = idToString();
     if (type === "movie") {
       const baseUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&sort_by=${sort}&include_adult=${includeAdult}&release_date.gte=${releaseAfter}&with_genres=${genres}`;
