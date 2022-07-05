@@ -53,7 +53,7 @@ export default function Home() {
     war: 10752,
     western: 37,
   };
-  const [releaseAfter, setReleaseAfter] = useState("");
+  const [releaseAfter, setReleaseAfter] = useState("1965");
   const [discoverData, setDiscoverData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedMovieGenres, setSelectedMovieGenres] = useState([]);
@@ -108,7 +108,7 @@ export default function Home() {
     const apiKey = process.env.NEXT_PUBLIC_TMDB_APIKEY;
     const genres = idToString();
     if (type === "movie") {
-      const baseUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&sort_by=${sort}&include_adult=${includeAdult}&release_date.gte=${releaseAfter}&with_genres=${genres}`;
+      const baseUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&sort_by=${sort}&include_adult=${includeAdult}&release_date.gte=${releaseAfter}&with_genres=${genres}&with_original_language=en`;
 
       fetch(baseUrl)
         .then((response) => response.json())
@@ -119,7 +119,7 @@ export default function Home() {
           setDiscoverData(results);
         });
     } else {
-      const baseUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&sort_by=${sort}&timezone=America%2FNew_York&first_air_date.gte=${releaseAfter}&with_genres=${genres}`;
+      const baseUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&sort_by=${sort}&timezone=America%2FNew_York&first_air_date.gte=${releaseAfter}&with_genres=${genres}&with_original_language=en`;
       fetch(baseUrl)
         .then((response) => response.json())
         .then((data) => {
@@ -130,8 +130,11 @@ export default function Home() {
         });
     }
   };
+  const [bg, setBg] = useState("#fff");
+  useEffect(() => {
+    setBg(() => getBgColor());
+  }, []);
 
-  const bg = getBgColor();
   const textc = "black";
   if (tabIndex === 0)
     return (
@@ -187,24 +190,36 @@ export default function Home() {
             }}>
             &#60;back
           </h5>
-          <h1 style={{ fontWeight: "bold" }}>what do you want to watch?</h1>
+          <h1 style={{ fontWeight: "bold", textAlign: "center" }}>
+            what do you want to watch?
+          </h1>
           <div className="container d-flex justify-content-center">
-            <button
+            <h4
+              style={{
+                fontWeight: "bold",
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
               className="m-3"
               onClick={() => {
                 setType("movie");
                 setTabIndex(tabIndex + 1);
               }}>
               movie
-            </button>
-            <button
+            </h4>
+            <h4
+              style={{
+                fontWeight: "bold",
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
               className="m-3"
               onClick={() => {
                 setType("tv");
                 setTabIndex(tabIndex + 1);
               }}>
               tv show
-            </button>
+            </h4>
           </div>
         </main>
       </>
@@ -235,81 +250,77 @@ export default function Home() {
             {type === "movie"
               ? Object.keys(movieGenreId).map((element) => {
                   return (
-                    <>
-                      <div key={Math.random()} className="d-flex flex-row">
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              size="small"
-                              onChange={(e) => {
-                                if (
-                                  selectedMovieGenres.includes(
-                                    movieGenreId[element]
-                                  )
-                                ) {
-                                  const index = selectedMovieGenres.indexOf(
-                                    movieGenreId[element]
-                                  );
-                                  const tmp = selectedMovieGenres;
-
-                                  tmp.splice(index, 1);
-                                  setSelectedMovieGenres(tmp);
-                                } else {
-                                  const tmp = selectedMovieGenres;
-                                  tmp.push(movieGenreId[element]);
-                                  setSelectedMovieGenres(tmp);
-                                }
-                                console.log(
-                                  "| selectedMovieGenres",
-                                  selectedMovieGenres
+                    <div key={Math.random()} className="d-flex flex-row">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            size="small"
+                            onChange={(e) => {
+                              if (
+                                selectedMovieGenres.includes(
+                                  movieGenreId[element]
+                                )
+                              ) {
+                                const index = selectedMovieGenres.indexOf(
+                                  movieGenreId[element]
                                 );
-                              }}
-                            />
-                          }
-                          label={
-                            <Typography sx={{ fontWeight: "bold" }}>
-                              {element}
-                            </Typography>
-                          }
-                        />
-                      </div>
-                    </>
+                                const tmp = selectedMovieGenres;
+
+                                tmp.splice(index, 1);
+                                setSelectedMovieGenres(tmp);
+                              } else {
+                                const tmp = selectedMovieGenres;
+                                tmp.push(movieGenreId[element]);
+                                setSelectedMovieGenres(tmp);
+                              }
+                              console.log(
+                                "| selectedMovieGenres",
+                                selectedMovieGenres
+                              );
+                            }}
+                          />
+                        }
+                        label={
+                          <Typography sx={{ fontWeight: "bold" }}>
+                            {element}
+                          </Typography>
+                        }
+                      />
+                    </div>
                   );
                 })
               : Object.keys(tvGenreId).map((element) => {
                   return (
-                    <>
-                      <div key={Math.random()} className="d-flex flex-row">
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              size="small"
-                              onChange={(e) => {
-                                if (
-                                  selectedTvGenres.includes(tvGenreId[element])
-                                ) {
-                                  const index = selectedTvGenres.indexOf(
-                                    tvGenreId[element]
-                                  );
-                                  const temp = selectedTvGenres;
-                                  temp.splice(index, 1);
-                                  setSelectedTvGenres(temp);
-                                } else {
-                                  const temp = selectedTvGenres;
-                                  temp.push(tvGenreId[element]);
-                                  setSelectedTvGenres(temp);
-                                }
-                              }}
-                            />
-                          }
-                          label={
-                            <Typography sx={{ fontWeight: "bold" }}>
-                              {element}
-                            </Typography>
-                          }
-                        />
-                      </div>
-                    </>
+                    <div key={Math.random()} className="d-flex flex-row">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            size="small"
+                            onChange={(e) => {
+                              if (
+                                selectedTvGenres.includes(tvGenreId[element])
+                              ) {
+                                const index = selectedTvGenres.indexOf(
+                                  tvGenreId[element]
+                                );
+                                const temp = selectedTvGenres;
+                                temp.splice(index, 1);
+                                setSelectedTvGenres(temp);
+                              } else {
+                                const temp = selectedTvGenres;
+                                temp.push(tvGenreId[element]);
+                                setSelectedTvGenres(temp);
+                              }
+                            }}
+                          />
+                        }
+                        label={
+                          <Typography sx={{ fontWeight: "bold" }}>
+                            {element}
+                          </Typography>
+                        }
+                      />
+                    </div>
                   );
                 })}
           </div>
@@ -435,7 +446,7 @@ export default function Home() {
               />
             </RadioGroup>
           </FormControl>
-          <h5
+          {/* <h5
             className="my-3"
             style={{
               cursor: "pointer",
@@ -448,7 +459,30 @@ export default function Home() {
               discover(sort);
             }}>
             find your {type} &#62;
-          </h5>
+          </h5> */}
+          <button
+            className={styles.cta}
+            onClick={() => {
+              setTabIndex(tabIndex + 1);
+              const sort = "popularity.desc";
+              discover(sort);
+            }}>
+            <span className={styles.hover_underline_animation}>
+              find your {type}
+            </span>
+            <svg
+              id="arrow-horizontal"
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="10"
+              viewBox="0 0 46 16">
+              <path
+                id="Path_10"
+                data-name="Path 10"
+                d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z"
+                transform="translate(30)"></path>
+            </svg>
+          </button>
         </main>
       </>
     );
@@ -470,9 +504,20 @@ export default function Home() {
             }}>
             &#60;back
           </h5>
+          <style jsx>
+            {`
+              @media (max-width: 750px) {
+                .sort-by-wrapper {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                }
+              }
+            `}
+          </style>
           <h1 style={{ fontWeight: "bold" }}>we recomend...</h1>
           <div className="sort-by-wrapper mb-3">
-            <MdSort style={{fontSize: '1.75rem'}} />
+            <MdSort style={{ fontSize: "1.75rem" }} />
             <span
               className="mx-2"
               style={{
@@ -483,7 +528,7 @@ export default function Home() {
               sort by...
             </span>
             <span
-            className="mx-3"
+              className="mx-3"
               style={{
                 fontWeight: "bold",
                 textDecoration: "underline",
@@ -495,7 +540,7 @@ export default function Home() {
                 const sort = "vote_average.desc";
                 discover(sort);
               }}>
-              IMDb descending
+              rating descending
             </span>
             <span
               style={{

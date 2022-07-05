@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaImdb } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import Image from "next/image";
 function MovieCard(props) {
   const {
@@ -173,10 +173,10 @@ function MovieCard(props) {
             <h6>{(release_date || first_air_date).substring(0, 4)}</h6>
             <div className="d-flex rating-wrapper align-items-center">
               <span className="minutes">
-                <FaImdb
+                <FaStar
                   style={{
                     color: "#f3ce13",
-                    fontSize: "1.25rem",
+                    // fontSize: "1.25rem",
                     marginRight: "5px",
                   }}
                 />
