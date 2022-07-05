@@ -145,7 +145,7 @@ export default function Home() {
         <div className={styles.container} style={{ backgroundColor: bg }}>
           <main className={styles.main}>
             <h1 style={{ textDecoration: "underline" }}>
-              don't know what to watch next?
+              dont know what to watch next?
               <br /> simple.{" "}
               <span style={{ fontStyle: "italic" }}> watch this next.</span>
             </h1>
