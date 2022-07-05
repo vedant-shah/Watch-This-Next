@@ -1,7 +1,8 @@
 import Link from "next/link";
 import React from "react";
-
+import { useRouter } from "next/router";
 const Navbar = (props) => {
+  const router = useRouter();
   return (
     <>
       <nav
@@ -27,9 +28,13 @@ const Navbar = (props) => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <a href="/">
+                <Link href="/">
                   <button
                     className="nav-link"
+                    // onClick={() => {
+                    //   router.push("/");
+                    //   router.reload(window.location.pathname);
+                    // }}
                     style={{
                       color: props.textc,
                     }}
@@ -37,7 +42,7 @@ const Navbar = (props) => {
                     href="/">
                     home
                   </button>
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
                 <Link href="/top">
