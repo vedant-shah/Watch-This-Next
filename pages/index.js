@@ -447,20 +447,7 @@ export default function Home() {
               />
             </RadioGroup>
           </FormControl>
-          {/* <h5
-            className="my-3"
-            style={{
-              cursor: "pointer",
-              textDecoration: "underline",
-              fontWeight: "bold",
-            }}
-            onClick={() => {
-              setTabIndex(tabIndex + 1);
-              const sort = "popularity.desc";
-              discover(sort);
-            }}>
-            find your {type} &#62;
-          </h5> */}
+
           <button
             className={styles.cta}
             onClick={() => {
@@ -516,7 +503,7 @@ export default function Home() {
               }
             `}
           </style>
-          <h1 style={{ fontWeight: "bold" }}>we recomend...</h1>
+          <h1 style={{ fontWeight: "bold" }}>we recommend...</h1>
           <div className="sort-by-wrapper mb-3">
             <MdSort style={{ fontSize: "1.75rem" }} />
             <span
