@@ -65,9 +65,10 @@ function Popular() {
   }, [popType]);
   const bg = "#032137";
   const textc = "whitesmoke";
+  const theme = "dark";
   return (
     <>
-      <Navbar bg={bg} textc={textc} />
+      <Navbar bg={bg} textc={textc} theme={theme} />
       <style jsx>
         {`
           #container {

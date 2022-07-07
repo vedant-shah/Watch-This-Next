@@ -136,11 +136,12 @@ export default function Home() {
   }, []);
 
   const textc = "black";
+  const theme = "light";
   if (tabIndex === 0)
     return (
       <>
         {/* ----------NavBar--------------- */}
-        <Navbar bg={bg} textc={textc} />
+        <Navbar bg={bg} textc={textc} theme={theme} />
         {/* ----------------Page------------------ */}
         <div className={styles.container} style={{ backgroundColor: bg }}>
           <main className={styles.main}>
@@ -177,7 +178,7 @@ export default function Home() {
   else if (tabIndex === 1)
     return (
       <>
-        <Navbar bg={bg} textc={textc} />
+        <Navbar bg={bg} textc={textc} theme={theme} />
         <main className={styles.container} style={{ backgroundColor: bg }}>
           <h5
             style={{
@@ -229,7 +230,7 @@ export default function Home() {
     // setSelectedTvGenres([]);
     return (
       <>
-        <Navbar bg={bg} textc={textc} />
+        <Navbar bg={bg} textc={textc} theme={theme} />
         <main className={styles.container} style={{ backgroundColor: bg }}>
           <h5
             style={{
@@ -342,7 +343,7 @@ export default function Home() {
     if (type === "movie")
       return (
         <>
-          <Navbar bg={bg} textc={textc} />
+          <Navbar bg={bg} textc={textc} theme={theme} />
           <main className={styles.container} style={{ backgroundColor: bg }}>
             <h5
               style={{
@@ -396,7 +397,7 @@ export default function Home() {
     };
     return (
       <>
-        <Navbar bg={bg} textc={textc} />
+        <Navbar bg={bg} textc={textc} theme={theme} />
         <main className={styles.container} style={{ backgroundColor: bg }}>
           <h5
             style={{
@@ -489,7 +490,7 @@ export default function Home() {
   } else if (tabIndex === 5) {
     return (
       <>
-        <Navbar bg={bg} textc={textc} />
+        <Navbar bg={bg} textc={textc} theme={theme} />
         <main className={styles.container} style={{ backgroundColor: bg }}>
           <h5
             style={{

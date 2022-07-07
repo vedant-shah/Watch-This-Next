@@ -62,9 +62,10 @@ function Top() {
   }, [topType]);
   const bg = "#000000";
   const textc = "whitesmoke";
+  const theme = "dark";
   return (
     <>
-      <Navbar bg={bg} textc={textc} />
+      <Navbar bg={bg} textc={textc} theme={theme} />
       <style jsx>
         {`
           #container {

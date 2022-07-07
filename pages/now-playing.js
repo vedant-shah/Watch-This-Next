@@ -64,9 +64,10 @@ function NowPlaying() {
   }, [nowType]);
   const bg = "#20192F";
   const textc = "whitesmoke";
+  const theme = "dark";
   return (
     <>
-      <Navbar bg={bg} textc={textc} />
+      <Navbar bg={bg} textc={textc} theme={theme} />
       <style jsx>
         {`
           #container {

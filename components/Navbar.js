@@ -13,7 +13,7 @@ const Navbar = (props) => {
           backgroundColor: props.bg,
           color: props.textc,
         }}
-        className="navbar  navbar-expand-lg navbar-dark sticky-top">
+        className={`navbar  navbar-expand-lg navbar-${props.theme} sticky-top`}>
         <div className="container-fluid">
           <button
             className="navbar-toggler"

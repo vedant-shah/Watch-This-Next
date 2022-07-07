@@ -64,9 +64,10 @@ function Watchlist() {
   }, [type]);
   const bg = "#0D2833";
   const textc = "whitesmoke";
+  const theme = "dark";
   return (
     <>
-      <Navbar bg={bg} textc={textc} />
+      <Navbar bg={bg} textc={textc} theme={theme} />
       <style jsx>
         {`
           #container {
