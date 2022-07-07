@@ -79,6 +79,17 @@ const Navbar = (props) => {
                   </button>
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link href="/watchlist">
+                  <button
+                    className="nav-link"
+                    style={{
+                      color: props.textc,
+                    }}>
+                    watchlist
+                  </button>
+                </Link>
+              </li>
             </ul>
             {/* <form className="">
               <input

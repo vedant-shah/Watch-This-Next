@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import Image from "next/image";
+import { MdLibraryAdd } from "react-icons/md";
+import Checkbox from "@mui/material/Checkbox";
+import { MdLibraryAddCheck } from "react-icons/md";
 function MovieCard(props) {
   const {
     backdrop_path,
@@ -13,7 +16,42 @@ function MovieCard(props) {
     runtime,
     name,
     first_air_date,
+    data,
+    type,
   } = props;
+  const [checked, setChecked] = useState(false);
+  const [flag, setFlag] = useState();
+  useEffect(() => {
+    const isChecked = () => {
+      if (type === "movie") {
+        if (localStorage.getItem("moviewatchlist")) {
+          let temp = false;
+          const watchlist = JSON.parse(localStorage.getItem("moviewatchlist"));
+          watchlist.forEach((element) => {
+            if (element.title === data.title) {
+              setChecked(true);
+              temp = true;
+            }
+          });
+          if (!temp) setChecked(false);
+        }
+      } else {
+        if (localStorage.getItem("tvwatchlist")) {
+          let temp = false;
+          const watchlist = JSON.parse(localStorage.getItem("tvwatchlist"));
+          watchlist.forEach((element) => {
+            if (element.name === data.name) {
+              setChecked(true);
+              temp = true;
+            }
+          });
+          if (!temp) setChecked(false);
+        }
+      }
+    };
+    isChecked();
+  }, [flag]);
+
   return (
     <>
       <style jsx>{`
@@ -53,6 +91,7 @@ function MovieCard(props) {
             margin-left: 0 !important;
           }
         }
+
         .info_section {
           position: relative;
           width: 100%;
@@ -172,16 +211,107 @@ function MovieCard(props) {
             <h5>{title || name}</h5>
             <h6>{(release_date || first_air_date).substring(0, 4)}</h6>
             <div className="d-flex rating-wrapper align-items-center">
-              <span className="minutes">
-                <FaStar
-                  style={{
-                    color: "#f3ce13",
-                    // fontSize: "1.25rem",
-                    marginRight: "5px",
+              <div className="internal-wrapper  ">
+                <span className="minutes me-2">
+                  <FaStar
+                    style={{
+                      color: "#f3ce13",
+                      // fontSize: "1.25rem",
+                      marginRight: "5px",
+                    }}
+                  />
+                  {vote_average}
+                </span>
+                <Checkbox
+                  checked={checked}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setChecked(true);
+                      if (type === "movie") {
+                        if (localStorage.getItem("moviewatchlist")) {
+                          let watchlist = JSON.parse(
+                            localStorage.getItem("moviewatchlist")
+                          );
+                          watchlist.push(data);
+                          localStorage.setItem(
+                            "moviewatchlist",
+                            JSON.stringify(watchlist)
+                          );
+                        } else {
+                          console.log("enterring");
+                          let watchlist = [];
+                          watchlist.push(data);
+                          localStorage.setItem(
+                            "moviewatchlist",
+                            JSON.stringify(watchlist)
+                          );
+                        }
+                      } else {
+                        if (localStorage.getItem("tvwatchlist")) {
+                          let watchlist = JSON.parse(
+                            localStorage.getItem("tvwatchlist")
+                          );
+                          watchlist.push(data);
+                          localStorage.setItem(
+                            "tvwatchlist",
+                            JSON.stringify(watchlist)
+                          );
+                        } else {
+                          let watchlist = [];
+                          watchlist.push(data);
+                          localStorage.setItem(
+                            "tvwatchlist",
+                            JSON.stringify(watchlist)
+                          );
+                        }
+                      }
+                    } else {
+                      setChecked(false);
+                      if (type === "movie") {
+                        let watchlist = JSON.parse(
+                          localStorage.getItem("moviewatchlist")
+                        );
+                        watchlist = watchlist.filter((element) => {
+                          if (element.title !== data.title) return element;
+                        });
+                        localStorage.setItem(
+                          "moviewatchlist",
+                          JSON.stringify(watchlist)
+                        );
+                      } else {
+                        let watchlist = JSON.parse(
+                          localStorage.getItem("tvwatchlist")
+                        );
+                        watchlist = watchlist.filter((element) => {
+                          if (element.title !== data.title) return element;
+                        });
+                        localStorage.setItem(
+                          "tvwatchlist",
+                          JSON.stringify(watchlist)
+                        );
+                      }
+                    }
                   }}
+                  icon={
+                    <MdLibraryAdd
+                      style={{
+                        fontSize: "1.5rem",
+                        color: "white",
+                        cursor: "pointer",
+                      }}
+                    />
+                  }
+                  checkedIcon={
+                    <MdLibraryAddCheck
+                      style={{
+                        fontSize: "1.5rem",
+                        color: "green",
+                        cursor: "pointer",
+                      }}
+                    />
+                  }
                 />
-                {vote_average}
-              </span>
+              </div>
               <p className="type mb-0">{genre_ids}</p>
             </div>
           </div>

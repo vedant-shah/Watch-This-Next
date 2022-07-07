@@ -51,18 +51,20 @@ function Popular() {
   const [popData, setPopData] = useState([]);
   useEffect(() => {
     const getTopData = () => {
+      setIsLoading(true);
       fetch(baseUrl)
         .then((response) => response.json())
         .then((data) => {
           const { results } = data;
           setIsLoading(false);
           setPopData(results);
+          setIsLoading(false);
         });
     };
     getTopData();
   }, [popType]);
-  const bg = '#032137';
-  const textc = 'whitesmoke'
+  const bg = "#032137";
+  const textc = "whitesmoke";
   return (
     <>
       <Navbar bg={bg} textc={textc} />
@@ -129,42 +131,47 @@ function Popular() {
           </div>
 
           {isLoading && <Spinner />}
-          {popData.map((element, index) => {
-            const {
-              backdrop_path,
-              genre_ids,
-              overview,
-              id,
-              poster_path,
-              release_date,
-              title,
-              vote_average,
-              first_air_date,
-              name,
-            } = element;
-            let genres = "";
-            if (popType === "movie")
-              genres =
-                movieGenreId[genre_ids[0]] + ", " + movieGenreId[genre_ids[1]];
-            else
-              genres = tvGenreId[genre_ids[1]]
-                ? tvGenreId[genre_ids[0]] + ", " + tvGenreId[genre_ids[1]]
-                : tvGenreId[genre_ids[0]];
-            return (
-              <MovieCard
-              key={Math.random()}
-                backdrop_path={backdrop_path}
-                genre_ids={genres}
-                overview={overview}
-                poster_path={poster_path}
-                release_date={release_date}
-                title={title}
-                vote_average={vote_average}
-                first_air_date={first_air_date}
-                name={name}
-              />
-            );
-          })}
+          {!isLoading &&
+            popData.map((element, index) => {
+              const {
+                backdrop_path,
+                genre_ids,
+                overview,
+                id,
+                poster_path,
+                release_date,
+                title,
+                vote_average,
+                first_air_date,
+                name,
+              } = element;
+              let genres = "";
+              if (popType === "movie")
+                genres =
+                  movieGenreId[genre_ids[0]] +
+                  ", " +
+                  movieGenreId[genre_ids[1]];
+              else
+                genres = tvGenreId[genre_ids[1]]
+                  ? tvGenreId[genre_ids[0]] + ", " + tvGenreId[genre_ids[1]]
+                  : tvGenreId[genre_ids[0]];
+              return (
+                <MovieCard
+                  key={Math.random()}
+                  backdrop_path={backdrop_path}
+                  genre_ids={genres}
+                  overview={overview}
+                  poster_path={poster_path}
+                  release_date={release_date}
+                  title={title}
+                  vote_average={vote_average}
+                  first_air_date={first_air_date}
+                  name={name}
+                  data={element}
+                  type={popType}
+                />
+              );
+            })}
         </div>
       }
     </>

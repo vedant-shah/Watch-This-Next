@@ -599,6 +599,8 @@ export default function Home() {
                   vote_average={vote_average}
                   first_air_date={first_air_date}
                   name={name}
+                  data={element}
+                  type={type}
                 />
               );
             })}

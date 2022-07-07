@@ -62,8 +62,8 @@ function NowPlaying() {
     };
     getTopData();
   }, [nowType]);
-  const bg = '#20192F';
-  const textc = 'whitesmoke'
+  const bg = "#20192F";
+  const textc = "whitesmoke";
   return (
     <>
       <Navbar bg={bg} textc={textc} />
@@ -71,7 +71,7 @@ function NowPlaying() {
         {`
           #container {
             min-height: 100vh;
-            background-color: #20192F;
+            background-color: #20192f;
           }
         `}
       </style>
@@ -157,7 +157,7 @@ function NowPlaying() {
                 : tvGenreId[genre_ids[0]];
             return (
               <MovieCard
-              key={Math.random()}
+                key={Math.random()}
                 backdrop_path={backdrop_path}
                 genre_ids={genres}
                 overview={overview}
@@ -167,6 +167,8 @@ function NowPlaying() {
                 vote_average={vote_average}
                 first_air_date={first_air_date}
                 name={name}
+                data={element}
+                type={nowType}
               />
             );
           })}

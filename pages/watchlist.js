@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import MovieCard from "../components/MovieCard";
 import Navbar from "../components/Navbar";
 import Link from "next/link";
 import Spinner from "../components/Spinner";
-function Top() {
+function Watchlist() {
   const movieGenreId = {
     12: "adventure",
     14: "fantasy",
@@ -43,24 +43,26 @@ function Top() {
     10767: "talk",
     10768: "war & politics",
   };
-  const [topType, setTopType] = useState("movie");
-  const api_key = process.env.NEXT_PUBLIC_TMDB_APIKEY;
-  const baseUrl = `https://api.themoviedb.org/3/${topType}/top_rated?api_key=${api_key}&language=en-US&page=1`;
+  const [type, setType] = useState("movie");
+  //   const api_key = process.env.NEXT_PUBLIC_TMDB_APIKEY;
+  //   const baseUrl = `https://api.themoviedb.org/3/${type}/top_rated?api_key=${api_key}&language=en-US&page=1`;
   const [isLoading, setIsLoading] = useState(true);
   const [topData, setTopData] = useState([]);
   useEffect(() => {
     const getTopData = () => {
-      fetch(baseUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          const { results } = data;
-          setIsLoading(false);
-          setTopData(results);
-        });
+      if (type === "movie") {
+        if (localStorage.getItem("moviewatchlist")) {
+          setTopData(JSON.parse(localStorage.getItem("moviewatchlist")));
+        }
+      } else {
+        if (localStorage.getItem("tvwatchlist")) {
+          setTopData(JSON.parse(localStorage.getItem("tvwatchlist")));
+        }
+      }
     };
     getTopData();
-  }, [topType]);
-  const bg = "#000000";
+  }, [type]);
+  const bg = "#0D2833";
   const textc = "whitesmoke";
   return (
     <>
@@ -69,7 +71,7 @@ function Top() {
         {`
           #container {
             min-height: 100vh;
-            background-color: #000000;
+            background-color: #0d2833;
           }
         `}
       </style>
@@ -96,17 +98,17 @@ function Top() {
               color: "whitesmoke",
               textDecoration: "underline",
             }}>
-            top
+            watchlist
           </h1>
           <div className="button-wrapper d-flex">
             <button
               className="mx-3"
               onClick={() => {
-                setTopType("movie");
+                setType("movie");
               }}
               style={{
                 color: "whitesmoke",
-                textDecoration: topType === "movie" ? "underline" : "none",
+                textDecoration: type === "movie" ? "underline" : "none",
                 display: "inline",
                 cursor: "pointer",
                 fontSize: "2.25rem",
@@ -115,10 +117,10 @@ function Top() {
             </button>
             <button
               className="mx-3"
-              onClick={() => setTopType("tv")}
+              onClick={() => setType("tv")}
               style={{
                 color: "whitesmoke",
-                textDecoration: topType === "tv" ? "underline" : "none",
+                textDecoration: type === "tv" ? "underline" : "none",
                 display: "inline",
                 cursor: "pointer",
                 fontSize: "2.25rem",
@@ -127,49 +129,64 @@ function Top() {
             </button>
           </div>
 
-          {isLoading && <Spinner />}
-          {topData.map((element, index) => {
-            const {
-              backdrop_path,
-              genre_ids,
-              overview,
-              id,
-              poster_path,
-              release_date,
-              title,
-              vote_average,
-              first_air_date,
-              name,
-            } = element;
-            let genres = "";
-            if (topType === "movie")
-              genres =
-                movieGenreId[genre_ids[0]] + ", " + movieGenreId[genre_ids[1]];
-            else
-              genres = tvGenreId[genre_ids[1]]
-                ? tvGenreId[genre_ids[0]] + ", " + tvGenreId[genre_ids[1]]
-                : tvGenreId[genre_ids[0]];
-            return (
-              <MovieCard
-                key={Math.random()}
-                backdrop_path={backdrop_path}
-                genre_ids={genres}
-                overview={overview}
-                poster_path={poster_path}
-                release_date={release_date}
-                title={title}
-                vote_average={vote_average}
-                first_air_date={first_air_date}
-                name={name}
-                data={element}
-                type={topType}
-              />
-            );
-          })}
+          {/* {isLoading && <Spinner />} */}
+          {topData.length === 0 && (
+            <h1
+              style={{
+                textAlign: "center",
+                color: "whitesmoke",
+                marginTop: "2rem",
+              }}>
+              ¯\_("/)_/¯
+              <br />
+              add some {type} to your watchlist and return
+            </h1>
+          )}
+          {topData.length > 0 &&
+            topData.map((element, index) => {
+              const {
+                backdrop_path,
+                genre_ids,
+                overview,
+                id,
+                poster_path,
+                release_date,
+                title,
+                vote_average,
+                first_air_date,
+                name,
+              } = element;
+              let genres = "";
+              if (type === "movie")
+                genres =
+                  movieGenreId[genre_ids[0]] +
+                  ", " +
+                  movieGenreId[genre_ids[1]];
+              else
+                genres = tvGenreId[genre_ids[1]]
+                  ? tvGenreId[genre_ids[0]] + ", " + tvGenreId[genre_ids[1]]
+                  : tvGenreId[genre_ids[0]];
+              return (
+                <MovieCard
+                  key={Math.random()}
+                  backdrop_path={backdrop_path}
+                  genre_ids={genres}
+                  overview={overview}
+                  poster_path={poster_path}
+                  release_date={release_date}
+                  title={title}
+                  vote_average={vote_average}
+                  first_air_date={first_air_date}
+                  name={name}
+                  data={element}
+                  type={type}
+                />
+              );
+            })}
         </div>
       }
     </>
   );
 }
 
-export default Top;
+export default Watchlist;
